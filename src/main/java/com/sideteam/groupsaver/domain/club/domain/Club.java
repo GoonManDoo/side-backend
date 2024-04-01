@@ -82,6 +82,9 @@ public class Club extends BaseEntity {
     @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
     private final List<ReportClub> reports = new ArrayList<>();
 
+    @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
+    private final List<PublicNotification> publicNotifications = new ArrayList<>();
+
 
     public static Club of(ClubRequest clubRequest) {
         ClubCategoryMajor categoryMajor = clubRequest.getMajor();
@@ -135,5 +138,9 @@ public class Club extends BaseEntity {
 
     public void addReport(ReportClub reportClub) {
         this.reports.add(reportClub);
+    }
+
+    public void addPublic(PublicNotification publicNotification) {
+        this.publicNotifications.add(publicNotification);
     }
 }
