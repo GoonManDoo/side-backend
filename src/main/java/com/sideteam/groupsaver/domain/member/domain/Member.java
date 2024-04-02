@@ -73,11 +73,8 @@ public class Member extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private MemberActive activeStatus;
 
-    @Embedded
-    private MemberAgreeTerms agreeTerms;
-
     @Builder
-    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, MemberRole role, JobMajor jobCategory, MemberGender gender, LocalDate birth, MemberAgreeTerms agreeTerms) {
+    protected Member(String password, String phoneNumber, String nickname, String email, OAuthProvider oAuthProvider, MemberRole role, JobMajor jobCategory, MemberGender gender, LocalDate birth) {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -87,7 +84,6 @@ public class Member extends BaseTimeEntity {
         this.jobCategory = jobCategory;
         this.gender = gender;
         this.birth = birth;
-        this.agreeTerms = agreeTerms;
         this.activeStatus = MemberActive.ACTIVE;
     }
 

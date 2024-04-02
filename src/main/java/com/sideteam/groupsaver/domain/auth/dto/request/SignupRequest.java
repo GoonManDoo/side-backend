@@ -46,11 +46,6 @@ public record SignupRequest(
         @JsonFormat(pattern = LOCAL_DATE_PATTERN)
         LocalDate birth,
 
-        boolean ageTerm,
-        boolean serviceTerm,
-        boolean userInfoTerm,
-        boolean locationTerm,
-
         List<ClubCategoryMajor> categories
 ) {
 }
