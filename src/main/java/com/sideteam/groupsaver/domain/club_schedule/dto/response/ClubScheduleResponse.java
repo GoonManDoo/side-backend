@@ -14,7 +14,8 @@ public record ClubScheduleResponse(
         String location,
         Long participationFee,
         LocalDateTime meetAt,
-        Integer currentParticipation
+        Integer currentParticipation,
+        Integer maxParticipation
 ) {
     public static ClubScheduleResponse from(ClubSchedule schedule) {
         return new ClubScheduleResponse(
@@ -25,7 +26,8 @@ public record ClubScheduleResponse(
                 schedule.getLocation(),
                 schedule.getParticipationFee(),
                 schedule.getMeetAt(),
-                schedule.getClubScheduleMemberCount()
+                schedule.getClubScheduleMemberCount(),
+                schedule.getMaxParticipation().intValue()
         );
     }
 }
