@@ -8,6 +8,7 @@ import com.sideteam.groupsaver.domain.club_schedule.repository.ClubScheduleMembe
 import com.sideteam.groupsaver.domain.club_schedule.repository.ClubScheduleRepository;
 import com.sideteam.groupsaver.domain.member.domain.Member;
 import com.sideteam.groupsaver.domain.member.repository.MemberRepository;
+import com.sideteam.groupsaver.global.auth.userdetails.GetAuthUserUtils;
 import com.sideteam.groupsaver.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.sideteam.groupsaver.global.exception.club.ClubScheduleErrorCode.CLUB_SCHEDULE_IS_FULL;
 
@@ -34,9 +38,9 @@ public class ClubScheduleMemberService {
 
 
     @Transactional(readOnly = true)
-    public Slice<ClubScheduleMemberResponse> getClubScheduleMembers(Long clubScheduleId, Pageable pageable) {
-        return clubScheduleMemberRepository.findAllScheduleMembersByClubScheduleId(clubScheduleId, pageable)
-                .map(ClubScheduleMemberResponse::from);
+    public List<ClubScheduleMemberResponse> getClubScheduleMembers(Long clubScheduleId) {
+        return clubScheduleMemberRepository.findAllScheduleMembersByClubScheduleId(clubScheduleId).stream()
+                .map(member -> createResponseClubMember(member, clubScheduleId)).toList();
     }
 
     @PreAuthorize("isAuthenticated() AND (( #memberId.toString() == principal.username ) OR hasRole('ADMIN'))")
@@ -58,10 +62,15 @@ public class ClubScheduleMemberService {
 
 
     private void checkIfParticipationExceed(ClubSchedule clubSchedule) {
-        if (clubSchedule.isReachMaximumParticipation()) {
+        if (clubSchedule.getClubScheduleMemberCount() != null && clubSchedule.isReachMaximumParticipation()) {
             log.warn("이미 가득찬 모임 일정! 모임일정 ID: {}", clubSchedule.getId());
             throw new BusinessException(CLUB_SCHEDULE_IS_FULL, clubSchedule.getId().toString());
         }
+    }
+
+    private ClubScheduleMemberResponse createResponseClubMember(Member member, Long clubScheduleId) {
+        boolean isLeader = clubMemberRepository.isLeader(clubScheduleRepository.findClubIdById(clubScheduleId), member.getId());
+        return ClubScheduleMemberResponse.from(member, isLeader, GetAuthUserUtils.getAuthUserId().equals(member.getId()));
     }
 
 }

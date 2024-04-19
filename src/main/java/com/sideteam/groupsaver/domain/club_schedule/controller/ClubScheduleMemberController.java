@@ -11,6 +11,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "Club")
 @Slf4j
 @RequiredArgsConstructor
@@ -21,10 +23,9 @@ public class ClubScheduleMemberController {
     private final ClubScheduleMemberService clubScheduleMemberService;
 
     @GetMapping("/{clubScheduleId}")
-    public ResponseEntity<Slice<ClubScheduleMemberResponse>> getClubScheduleMembers(
-            @PathVariable Long clubScheduleId,
-            Pageable pageable) {
-        return ResponseEntity.ok(clubScheduleMemberService.getClubScheduleMembers(clubScheduleId, pageable));
+    public ResponseEntity<List<ClubScheduleMemberResponse>> getClubScheduleMembers(
+            @PathVariable Long clubScheduleId) {
+        return ResponseEntity.ok(clubScheduleMemberService.getClubScheduleMembers(clubScheduleId));
     }
 
     @PostMapping("/{clubScheduleId}")

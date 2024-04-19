@@ -27,7 +27,7 @@ public interface ClubScheduleRepository extends JpaRepository<ClubSchedule, Long
     }
 
 
-    @Query("SELECT cs FROM ClubSchedule cs WHERE cs.club.id=:clubId")
+    @Query("SELECT cs FROM ClubSchedule cs WHERE cs.club.id=:clubId ORDER BY cs.id DESC")
     Page<ClubSchedule> findAllByClubId(Long clubId, Pageable pageable);
 
     @Lock(value = LockModeType.PESSIMISTIC_READ)
@@ -41,5 +41,6 @@ public interface ClubScheduleRepository extends JpaRepository<ClubSchedule, Long
             "AND (cs.creator.id = :memberId OR cm.member.id = :memberId AND cm.role = :role) ")
     boolean isCreatorOrHasClubRole(Long memberId, Long clubScheduleId, ClubMemberRole role);
 
-
+    @Query("SELECT cs.club.id FROM ClubSchedule cs WHERE cs.id=:id")
+    Long findClubIdById(Long id);
 }
