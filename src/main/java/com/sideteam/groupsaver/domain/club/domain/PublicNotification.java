@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +23,8 @@ public class PublicNotification extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
+    @OneToMany(mappedBy = "publicNotification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PublicNotiComment> commentList = new ArrayList<>();
 
     @Builder
     public PublicNotification(String title, String body, boolean fix, Club club) {
@@ -44,5 +49,9 @@ public class PublicNotification extends BaseEntity {
         } else {
             this.fix = false;
         }
+    }
+
+    public void addComment(PublicNotiComment publicNotiComment) {
+        this.commentList.add(publicNotiComment);
     }
 }
