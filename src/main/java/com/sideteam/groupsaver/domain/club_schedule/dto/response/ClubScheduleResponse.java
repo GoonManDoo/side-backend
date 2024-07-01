@@ -1,8 +1,7 @@
 package com.sideteam.groupsaver.domain.club_schedule.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sideteam.groupsaver.domain.club_schedule.domain.ClubSchedule;
-import com.sideteam.groupsaver.global.util.ProjectTimeFormat;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +22,7 @@ public record ClubScheduleResponse(
                 schedule.getClub().getId(),
                 schedule.getTitle(),
                 schedule.getDescription(),
-                schedule.getLocation(),
+                StringUtils.hasText(schedule.getLocation()) ? schedule.getLocation() : "온라인",
                 schedule.getParticipationFee(),
                 schedule.getMeetAt(),
                 schedule.getClubScheduleMemberCount(),

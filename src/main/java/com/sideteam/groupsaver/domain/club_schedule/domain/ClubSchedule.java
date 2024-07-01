@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -62,7 +63,7 @@ public class ClubSchedule extends BaseEntity {
                 clubScheduleRequest.title(),
                 clubScheduleRequest.description(),
                 clubScheduleRequest.maxParticipation(),
-                clubScheduleRequest.location(),
+                StringUtils.hasText(clubScheduleRequest.location()) ? clubScheduleRequest.location() : "온라인",
                 clubScheduleRequest.participationFee()
         );
     }
